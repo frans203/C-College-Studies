@@ -3,22 +3,22 @@
 
 int main() {
     int option;
-    float space, velocity, time, velocityI, velocityF, acceleration;
-    printf("Select an option: \n 1) Space as function of Velocity & Time \n 2) Space as function of initial velocity, acceleration, time \n 3) Final velocity as function of acceleration and time\n");
+    float space, speed, time, speedI, speedF, acceleration;
+    printf("Select an option: \n 1) Space as function of speed & Time \n 2) Space as function of initial speed, acceleration, time \n 3) Final speed as function of acceleration and time\n");
     scanf("%d", &option);
     if(option == 1){
-        printf("Set velocity: ");
-        scanf("%f", &velocity);
+        printf("Set speed: ");
+        scanf("%f", &speed);
 
         printf("Set time: ");
         scanf("%f", &time);
 
-        printf("Space is: %f", velocity * time);
+        printf("Space is: %f", speed * time);
     }
 
     if(option == 2){
-        printf("Set initial velocity:");
-        scanf("%f", &velocityI);
+        printf("Set initial speed:");
+        scanf("%f", &speedI);
 
         printf("Set time:");
         scanf("%f", &time);
@@ -26,7 +26,7 @@ int main() {
         printf("Set acceleration:");
         scanf("%f", &acceleration);   
 
-        printf("Space is: %f", (velocityI * time) + (acceleration * pow(time, 2))/2);
+        printf("Space is: %f", (speedI * time) + (acceleration * pow(time, 2))/2);
     }
 
     if(option == 3){
@@ -36,7 +36,7 @@ int main() {
         printf("Set time: ");
         scanf("%f", &time);
 
-        printf("Final velocity is: %f", acceleration * time);
+        printf("Final speed is: %f", acceleration * time);
     }
     return  0;
 }

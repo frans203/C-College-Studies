@@ -1,0 +1,11 @@
+TO PRINT
+%s string
+%f float
+%lf ou %f double
+%d integer 
+
+TO SCAN
+%s string // doesnt need the & in front of the variable
+%lf double
+%f float
+%d integer

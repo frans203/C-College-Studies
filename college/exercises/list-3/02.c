@@ -27,7 +27,7 @@ int main() {
     printf("num3 Hex: %o\n", num3);
     printf("num4 Hex: %o\n", num4);
 
-    printf("Average: %f", (num1 + num2 + num3 + num4)/4);
+    printf("Average: %f", (num1 + num2 + num3 + num4)/4.0);
 
 
     return 0;

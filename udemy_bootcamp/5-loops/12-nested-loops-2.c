@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+
+int main(){
+    int n, i ,j;
+    printf("Enter a value for n:");
+    scanf("%d", &n);
+
+    //my solution
+    // for(i = 1; i <= n; i++){
+    //     for ( j = 1; j <= i; j++)
+    //     {
+    //         printf("%d", i);
+    //     }
+    //     printf("\n");
+        
+    // }
+
+    for(i = 1; i <= n; i++){
+         j = i;
+         while (j > 0)
+         {
+             printf("%d", i);
+             j--;
+         }
+         printf("\n");
+         
+    }
+
+
+    return 0;
+}
+

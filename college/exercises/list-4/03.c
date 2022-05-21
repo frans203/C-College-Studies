@@ -3,6 +3,7 @@
 
 int main() {
     char value;
+	int numberValue;
     printf("Enter a character symbol: ");
     scanf("%c", &value);
     switch(value){
@@ -38,17 +39,19 @@ int main() {
 			break;
 		}
         default: {
-            if((value >= 48) && (value <57)){
-                printf("number \n", value);
-            }else{
-                if( 
-                    ((value >= 65) && (value <=90)) 
-                    || 
-                    ((value >=97) && (value <= 122))){
-                        printf("Consonant");
-                }else{
-                    printf("Error");
-                }
+			numberValue = (int)value;
+			if((int)numberValue>=97 && (int)numberValue<=122){
+				printf("consonant");
+			}else if((int)numberValue>=65 && (int)numberValue<=90){
+				printf("consonant");
+			}
+			// if(((int)numberValue>=65 && (int)numberValue<=90) || ((int)numberValue>=97 && (int)numberValue<=122)){
+
+			// 	printf("Consonant %s", value);
+
+            // }
+            if((value >= 48) && (value <=57)){
+                printf("number %d\n", value);
             }
         }
 

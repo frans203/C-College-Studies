@@ -2,7 +2,6 @@
 
 int main(){
     int num;
-    float value = 1888;
     int currentDigit;
     int evenSum = 0, oddSum = 0;
     printf("Enter num: ");
@@ -17,17 +16,17 @@ int main(){
 
     while (num > 0){
         currentDigit = num  % 10;
+        printf("currentDigit: %d \n", currentDigit);
         if(currentDigit % 2 == 0){
             evenSum += currentDigit;
         }else{
             oddSum += currentDigit;
         }
         num = num / 10.0;
-        printf("%.2f \n", (float)num / 10.0);
-        
+        // printf("%.2f \n", (float)num / 10.0);
     }
 
-    printf("Even: %d \n", evenSum);
+    printf("Even: %.2f \n", (float)evenSum);
     printf("Odd: %d \n", oddSum);
     // printf("%f", 1999 / 10)
     return 0;

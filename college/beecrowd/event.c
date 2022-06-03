@@ -15,7 +15,6 @@ int main() {
     hoursDuration = finalHours - initHours;
     minutesDuration = finalMinutes - initMinutes;
     secondsDuration = finalSeconds - initSeconds;
-   
         if(hoursDuration < 0){
             daysDuration--;
             hoursDuration = 24 - (initHours - finalHours);

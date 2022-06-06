@@ -19,18 +19,13 @@ int main(){
     ptrA = ptrB; //ptrB and ptrB points to num2;
     ptrB = ptrA; //ptrB points to num2
 
-    printf("num 1 = %d, num2 = %d \n", num1, num2);
     printf("*ptrA = %d, *ptr2 = %d \n", *ptrA, *ptrB);
+    printf("num 1 = %d, num2 = %d \n", num1, num2);
 
     num1 = *ptrB;
     num2 = num1 - 3;
 
     printf("num 1 = %d, num2 = %d \n", num1, num2);
-
-
-
-
-
-
+    
     return 0;
 }

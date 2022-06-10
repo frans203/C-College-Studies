@@ -1,6 +1,10 @@
 #include<stdio.h>
 #include<conio.h>
 
+#define _CRT_SECURE_NO_WARNINGS
+#define ALMOSTZERO 0.0000000000000000001
+#define LN10 2.3025850929940456840179914546844
+
 int findRoot(int number){
     int sqrt, temp;
     sqrt = number / 2;
@@ -20,12 +24,35 @@ int findRoot(int number){
     return sqrt;
 }
 
-int exp(a){
+double exp(double a){
     int ans=1;
     for(int i=0; i<2.71828;i++){
     ans *= a;
     }
     return ans;
+}
+
+double ln(double x)
+{
+    double old_sum = 0.0;
+    double xmlxpl = (x - 1) / (x + 1);
+    double xmlxpl_2 = xmlxpl * xmlxpl;
+    double denom = 1.0;
+    double frac = xmlxpl;
+    double term = frac;                 // denom start from 1.0
+    double sum = term;
+
+    while ( sum != old_sum )
+    {
+        old_sum = sum;
+        denom += 2.0;
+        frac *= xmlxpl_2;
+        sum += frac / denom;
+    }
+    return 2.0 * sum;
+}
+double log10( double x ) {
+    return ln(x) / LN10;    
 }
 
 
@@ -74,15 +101,15 @@ l=j*(-1);
 
 m=cos(k/3);
 
-n=sqrt(3)*sin(k/3);
+n=findRoot(3)*sin(k/3);
 
 p=(b/3*a)*(-1);
 
-r=(-1)*(g/2)+sqrt(h);
+r=(-1)*(g/2)+findRoot(h);
 
 s=exp(log10(r)/log10(e)/3);
 
-t=(-1)*(g/2)-sqrt(h);
+t=(-1)*(g/2)-findRoot(h);
 
 u=exp(log10(t)/log10(e)/3);
 
@@ -100,7 +127,7 @@ x1=(s+u)-(b/3*a);
 
 x2=(-1)*(s+u)/2-(b/3*a);
 
-x3=(s-u)*sqrt(3)/2;
+x3=(s-u)*findRoot(3)/2;
 
 printf("\nA 3 pont:\n%lf\n%lf +i*%lf\n%lf -i*%lf", x1, x2, x3, x2, x3);
 

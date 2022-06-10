@@ -27,16 +27,23 @@ double divi(double dividend, double divisor)
 }
 
 // This will be called every time we have to calculate the power of a number raised to another
-double pow(double base, double exponent)
-{
-    double power;
-    for (int i = 0; i < exponent; i++)
+//san
+int pow(int base, int exp)
     {
-        power = base * base;
-    }
-    return power;
-}
+      if(exp < 0)
+        return -1;
 
+        int result = 1;
+        while (exp)
+        {
+            if (exp & 1)
+                result *= base;
+            exp >>= 1;
+            base *= base;
+        }
+
+        return result;
+}
 // This will be called every time we have to calculate the root of a number equal to 0 or grather, from the passed index
 double root(double number, double index)
 {

@@ -1,305 +1,475 @@
+/*
+Sites uuteis para a documentacao e estudo o codigo:
+https://www.blogcyberini.com/2017/09/algoritmo-equacao-terceiro-grau.html
+https://www.indiastudychannel.com/resources/169911-Equation-Solving-using-C-Programming.aspx
+https://www.geeksforgeeks.org/find-cubic-root-of-a-number/
+http://sitegui.com.br/calc/
+https://www.cprogressivo.net/2013/02/Como-criar-uma-calculadora-em-linguagem-C.html
+https://pt.wikipedia.org/wiki/Nota%C3%A7%C3%A3o_polonesa_inversa
+https://pt.stackoverflow.com/questions/6382/receber-uma-express%C3%A3o-e-calcular-em-c
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-// https://www.blogcyberini.com/2017/09/algoritmo-equacao-terceiro-grau.html
-//  This function will be called every time we have to add numbers
+// Funcao basica para adicao
+double somar(double a, double b) { return a + b; }
 
-double add(double numberOne, double numberTwo)
+// Funcao basica para subtracao
+double subtrair(double a, double b) { return a - b; }
+
+// Funcao basica de multiplicacao
+double multiplicar(double a, double b) { return a * b; }
+
+// Funcao basica de divisao
+// a dividido por b
+double dividir(double a, double b) { return a / b; }
+
+// Funcao para elevar a ao expoente b
+// a pode ser decimal
+// b deve ser inteiro
+double exponencial(double a, int b)
 {
-    return numberOne + numberTwo;
+  double potencia = 1;
+
+  if (a == 0)
+    return potencia;
+
+  if (b == 0)
+    return potencia = 1;
+
+  for (int i = 0; i < b; i++)
+  {
+    potencia *= a;
+  }
+  return potencia;
 }
 
-// This will be called every time we have to subtract numbers
-double sub(double numberOne, double numberTwo)
+// Funcao que retorna a raiz quadrada de a
+// O valor de a deve ser positivo.
+double raizQuadrada(double a)
 {
-    return numberOne - numberTwo;
+  if (a < 0)
+  {
+    printf("O valor do número deve ser um inteiro positivo.");
+    return 0;
+  }
+  double raiz, temp;
+  raiz = a / 2;
+  temp = 0;
+  // Itera o resultado ate que a raiz seja diferente da variavel temp, que eh
+  // alterada a cada loop
+  while (raiz != temp)
+  {
+    // Inicia com o valor 0 e eh atualizada com o valor de a
+    temp = raiz;
+    raiz = (a / temp + temp) / 2.0;
+  }
+  return raiz;
 }
 
-// This will be called every time we have to multply numbers
-double mult(double numberOne, double numberTwo)
+// Funcao que calcula o valor fatorial do numero a
+// So aceita numeros inteiros e positivos
+int fatorial(int a)
 {
-    return numberOne * numberTwo;
+  // Condicao de existencia do fatorial
+  if (a <= 0)
+  {
+    printf("O valor do número deve ser maoir que zero.");
+    return 0;
+  }
+
+  double fatorial = a;
+
+  for (int auxiliar = --a; auxiliar > 0; auxiliar--)
+    fatorial *= auxiliar;
+
+  return fatorial;
 }
 
-double divi(double dividend, double divisor)
+// Para realizar a equacao do segundo e terceiro grau, precisaremos de mais do que uma funcao //
+
+// Esta funcao verifica a condicao de existencia das equacoes a partir do valor do coeficiente A
+// O coeficiente A deve ser um inteiro
+// Se o coeficiente for valido, retorna 1, se não, retorna 0
+int coeficiente_a_valido(int coeficienteA)
 {
-    return dividend / divisor;
+  if (coeficienteA == 0)
+  {
+    printf("Coeficiente A não pode ser igual a zero!\n");
+    return coeficienteA;
+  }
+  else
+    return 1;
 }
 
-// This will be called every time we have to calculate the power of a number raised to another
-//san
-int pow(int base, int exp)
+// Esta funcao eh responsavel por calcular o valor de delta
+int delta(int coeficienteA, int coeficienteB, int coeficienteC)
+{
+  return (exponencial(coeficienteB, 2) - (4 * coeficienteA * coeficienteC));
+}
+// Esta funcao calcula as raizes de uma equacao quadratica no formato ax^2 + bx + c = 0
+// As raizes ficarao armazenadas no vetor raizes[]
+void equacaoQuadratica(int coeficienteA, int coeficienteB, int coeficienteC,
+                       double raizes[], int erro)
+{
+
+  // Verifica o coeficiente A da equacao para poder prosseguir ou lancar uma mensagem de erro
+  if (!coeficiente_a_valido(coeficienteA))
+  {
+    printf("coeficiente a invalido!\n");
+    erro = 1;
+  }
+  else
+  {
+    // Calcula o valor de delta
+    int deltaValor = delta(coeficienteA, coeficienteB, coeficienteC);
+
+    // Caso delta seja maior que zero, teremos duas raizes reais distintas
+    if (deltaValor > 0)
     {
-      if(exp < 0)
-        return -1;
+      raizes[0] =
+          (-coeficienteB + raizQuadrada(deltaValor)) / (2 * coeficienteA);
+      raizes[1] =
+          (-coeficienteB - raizQuadrada(deltaValor)) / (2 * coeficienteA);
+      printf("Raiz 1 = %.2lf; Raiz 2 = %.2lf.\n", raizes[0], raizes[1]);
+    }
 
-        int result = 1;
-        while (exp)
-        {
-            if (exp & 1)
-                result *= base;
-            exp >>= 1;
-            base *= base;
-        }
-
-        return result;
-}
-// This will be called every time we have to calculate the root of a number equal to 0 or grather, from the passed index
-double root(double number, double index)
-{
-    if (number < 0)
+    // Caso delta seja igual a zero, teremos dua raizes iguais
+    else if (deltaValor == 0)
     {
-        printf("This calculator cannot root negative numbers!");
-        return 0;
+      raizes[0] = raizes[1] = -coeficienteB / (2 * coeficienteA);
+      printf("As duas raizes  valem %.2lf.\n", raizes[0]);
     }
-    double root;
-    for (int i = 0; i < index; i++)
+
+    // Caso delta seja menor que zero, nao teremos raizes reais
+    else if (deltaValor < 0)
     {
-        root = number / number;
+      printf("A equação não tem raizes reais.\n");
+      erro = 1;
     }
-    return root;
+  }
+  return;
 }
 
-// Check if the coefficient A is diferente of 0
-void checkCoefficientA(int coefficientA)
+// Funcao que reduz uma equacao do terceiro grau para uma equacao do segundo a partir dos coeficientes da equcao do terceiro gra
+// Ela utiliza o metodo de Briot-Ruffini e retorna os coeficientes da equacao do segundo grau
+void briotRuffini(double raiz, int coeficienteA, int coeficienteB,
+                  int coeficienteC, int coeficienteD, int novoCoeficienteA,
+                  int novoCoeficienteB, int novoCoeficienteC)
 {
-    if (coefficientA == 0)
+  novoCoeficienteA = coeficienteA;
+  novoCoeficienteB = novoCoeficienteA * raiz + coeficienteB;
+  novoCoeficienteC = novoCoeficienteB * raiz + coeficienteC;
+  int resto = novoCoeficienteC * raiz + coeficienteD;
+}
+
+// Esta funcao sera utilizada para resolver a raiz cubica
+double diferenca(double a, double auxiliar)
+{
+  if (a > (auxiliar * auxiliar * auxiliar))
+    return (a - (auxiliar * auxiliar * auxiliar));
+  else
+    return ((auxiliar * auxiliar * auxiliar) - a);
+}
+
+// Esta função calcula a raiz cúbica de um decimal a
+// De longe, um dos maiores desafios neste projeto foi descobrir o algoritmo para calcular a raiz cúbica, 
+// juntamente com a função para calcular a equação cúbica
+double raizCubica(double a)
+{
+
+  // Se o numero for negativo, o valor de a ficara positivo para o algoritimo
+  // funcionar e no final, tornamos negativo de novo
+  int sinal = 0;
+  if (a < 0)
+  {
+    a = -a;
+    sinal = 1;
+  }
+  // Valores inicial e final para calcular a raiz
+  double inicio = 0, fim = a;
+
+  // Precisao da raiz pode ser alterada a partir do valor de e
+  double e = 0.00000001;
+
+  while (1)
+  {
+    double auxiliar = (inicio + fim) / 2;
+    double erro = diferenca(a, auxiliar);
+
+    // Se o erro for menor que 'e', entao o auxiliar eh nossa resposta que sera o retorno da funcao
+    if (erro <= e)
     {
-        printf("Coefficient A cannot be equal to zero!");
+      if (sinal)
+      {
+        auxiliar = -auxiliar;
+        return auxiliar;
+      }
+      return auxiliar;
     }
-}
+    // Se auxiliar*auxiliar*auxiliar eh maior que a, fim = auxiliar
+    if ((auxiliar * auxiliar * auxiliar) > a)
+      fim = auxiliar;
 
-// This function is responsible for return the value of delta
-double delta(int coefficientA, int coefficientB, int coefficientC)
+    // Se auxiliar*auxiliar*auxiliar eh menor que a, inicio = auxiliar
+    else
+      inicio = auxiliar;
+  }
+}
+// Nao conseguimos implementar
+void equacaoCubica();
+
+// Para manipular o historico teremos duas funcoes, uma para adicionar o esultado e outra para printar na tela
+// Aqui definimos o tamanho da matriz que sera o nosso historico
+#define LINHAS 10
+// A quantidade de colunas é referente ao número de parametros exibidos pelo histórico
+#define COLUNAS 4
+ 
+// O historico vai armazenar apenas 10 cálculos, depois será apagado
+int historico(int contador, double numeros[], char operador, double resultado[],
+              double matrizHistorico[LINHAS][COLUNAS])
 {
-    return (pow(coefficientB, 2) - (4 * coefficientA * coefficientC));
-}
-//SAN
-double findRoot(double number){
-    double sqrt, temp;
-    sqrt = number / 2;
-        temp = 0;
-        // Iterate until sqrt is different of temp, that is updated on the loop
-        while(sqrt != temp){
-            // initially 0, is updated with the initial value of 128
-            // (on second iteration = 65)
-            // and so on
-            temp = sqrt;
-
-            // Then, replace values (256 / 128 + 128 ) / 2 = 65
-            // (on second iteration 34.46923076923077)
-            // and so on
-            sqrt = ( number/temp + temp) / 2.0;
-        }
-    return sqrt;
-}
-
-//SAN
-// Here will be calculated the root of quadratic equations in this format ax^2 + bx + c = 0
-// The value of the roots will be stored into the vector roots[]
-void quadraticEquations(int coefficientA, int coefficientB, double delta, double roots[])
-{
-    if (delta > 0) {
-        roots[0] = (-coefficientB + findRoot(delta)) / (2 * coefficientA);
-        roots[1] = (-coefficientB- findRoot(delta)) / (2 * coefficientA);
-        printf("root 1 = %.2lf and root 2 = %.2lf", roots[0], roots[1]);
-    }
-
-    // condition for real and equal roots
-    else if (delta == 0) {
-        roots[0] = roots[1] = -coefficientB / (2 * coefficientA);
-        printf("root 1 = root 2 = %.2lf;", roots[0]);
-    }
-
-    // if roots are not real
-    else { 
-       printf("The equation hasn't real roots\n");
-    }
-}
-
-
-
-// This funcion reduce the cubic equation to quadratic equation using Briot-Ruffini
-void briotRuffini(int coefficientA, int coefficientB, int coefficientC, int coefficientD, double root, int coefficientA2, int coefficientB2, int coefficientC2)
-{
-    coefficientA2 = coefficientA * root + coefficientB;
-    coefficientB2 = coefficientB * root + coefficientC;
-    coefficientC2 = coefficientC * root + coefficientD;
-}
-
-// First we need to figure out the first root of the equation using P / Q, where P is a divisor of coefficientD and Q is a divisor of coefficientA
-void cubicEquation(int coefficientA, int coefficientB, int coefficientC, int coefficientD, double roots[])
-{
-    /* Condition of existence: a != 0
-        Δ = q^2 / 4 + p^3 / 27.
-    If:
-        Δ = 0, the equation has three real roots and one of them is repeated;
-        Δ < 0, the equation has three distincts real roots;
-        Δ > 0, the equation has one real root and two conjugate complex roots;
-    */
-
-    double p = (-pow(coefficientB, 2) / 3 * pow(coefficientA, 2)) + coefficientC / coefficientA;                                                                         // p = (-b^2/3a^2) + c/a
-    double q = ((2 * pow(coefficientB, 3) - (9 * coefficientA * coefficientB * coefficientC) + (27 * pow(coefficientA, 2) * coefficientD)) / 27 * pow(coefficientA, 3)); //(2b^3 - 9abc + 27a^2d) / 27a^3
-    double delta = pow(q, 2) / 4 + pow(p, 3) / 27;
-
-    if (delta >= 0 || delta == 0)
+  ++contador;
+  if (contador > LINHAS)
+  {
+    double matrizNova[LINHAS][COLUNAS];
+    for (int i = LINHAS; i > 0; i--)
     {
-        // The firts root using Cardano and Tartaglia and Ferro
-        roots[2] = root(-q / 2 + root(delta, 2), 3) + root(-q / 2 + root(delta, 2), 3) - (coefficientB / 3 * coefficientA); // ^3V‾(-(q/2) + V‾(q^2/4) + (p^3/27)) + ^3V‾(-(q/2) + V‾(q^2/4) + (p^3/27)) - (b/3a)
-
-        // The other roots, if are real, apllying Briot-Ruffini to reduce the cubic equation to quadratic equation and calling the bhaskara function
-        int coefficientA2, coefficientB2, coefficientC2;
-        briotRuffini(coefficientA, coefficientB, coefficientC, coefficientD, roots[0], coefficientA2, coefficientB2, coefficientC2);
-        quadraticEquations(coefficientA2, coefficientB2, coefficientC2, roots);
+      matrizHistorico[i][0] = matrizHistorico[i - 1][0];
+      matrizHistorico[i][1] = matrizHistorico[i - 1][1];
+      matrizHistorico[i][2] = matrizHistorico[i - 1][2];
+      matrizHistorico[i][3] = matrizHistorico[i - 1][3];
     }
+    contador = 1;
+  }
+  int i = contador;
+  --i;
+  double parserOperador = operador;
+  matrizHistorico[i][0] = numeros[0];
+  matrizHistorico[i][1] = parserOperador;
+  matrizHistorico[i][2] = numeros[1];
+  matrizHistorico[i][3] = resultado[0];
+  return contador;
 }
-//SAN
-int factorialOf(int factorial)
+// Essa funcao eh responsavel por printar o historico
+void imprimirHistorico(int contador, double matriz[LINHAS][4])
 {
-    int i;
-    //defining result variable
-    double result = 0;
-    //loop over all integer elements from 1 to the factorial number
-    for(i = factorial; i > 0; i--){
-        if(i == factorial){
-            result = i; //the first value needs to be equal to factorial number
-        }else{
-            result = i * (result); //multiplying the current value with the previous one (Ex: 5*4, after that and 20*3, etc.)
-        }
-    }
-    //printing the result
-    printf("result: %.0lf", result);
-}
+  int i = 0;
+  do
+  {
+    printf("Expressão %d: %.4lf %c %.4lf = %.4lf;\n", i, matriz[i][0],
+           (int)matriz[i][1], matriz[i][2], matriz[i][3]);
+    i++;
+  } while (i < contador);
+  return;
+};
 
+// Aqui na funcao main esta todo o codigo do menu da aplicacao e uma apresentacao do grupo
 int main(int argc, char const *argv[])
 {
-    // O valor do coeficiente não pode ser igual a zero
-    //  if (coeficienteA == 0) {
-    //  printf("Valor do coeficeiente angular deve ser diferente de 0!\n");
-    //  sleep(2);
-    //  system("clear");
-    //  goto coeficienteAngular;
-    //  }
-    // switch para as operacoes
-    // do-while para o loop
-    // a interface deve utilizar array para armazenar resultados
-    //  if ax^2 + bx + c != 0 -> c + (-resultado)
-    //  if  ax^3 + bx^2 + cx + d != 0 -> d + (-resultado)
-    //  printf("\n\tTo see how to use, select the guide option below:\n");
-    //      printf("\tTo add numbers: +\n");
-    //      printf("\tTo subtract numbers: -\n");
-    //      printf("\tTo divide numbers: /\n");
-    //      printf("\tTo multply numbers: *\n");
-    //  roots[1] = root(-q / 2 + root(delta, 2), 3) + root(-q / 2 + root(delta, 2), 3) - (coefficientB / 3 * coefficientA); // z * ^3V‾(-(q/2) + V‾(q^2/4) + (p^3/27)) + Z‾ * ^3V‾(-(q/2) + V‾(q^2/4) + (p^3/27)) - (b/3a)
-    //  roots[2] = root(-q / 2 + root(delta, 2), 3) + root(-q / 2 + root(delta, 2), 3) - (coefficientB / 3 * coefficientA); // Z‾ * ^3V‾(-(q/2) + V‾(q^2/4) + (p^3/27)) + z * ^3V‾(-(q/2) + V‾(q^2/4) + (p^3/27)) - (b/3a)
+  double matrizHistorico[LINHAS][COLUNAS];
+// Caractere que armazena a operaçcao que deve ser executada
+ char operador;
+ double result;
+ double resultado[1];
+ double parametros[2];
+ double parametro[1];
+ double coeficientes[3];
+// Contador que eh usado para verificar quanta operacoes ja foram executas
+ int contador = 0;
+ double a, b = 0;
 
-    // char arithmeticExpression[100];
-    // printf("\n------------------------- Calculator -------------------------\n");
-    // printf("\n\tType your expression or help: ");
-    // scanf("%s", arithmeticExpression);
-    // printf("\n------------------------- Final Project IC -------------------------\n\n");
+  printf("*********************************************************************"
+         "********\n");
+  sleep(1);
+  printf("**********                                                         "
+         "**********\n");
+  sleep(1);
+  printf("********** Projeto Final de Introducao ao Computador - Calculadora "
+         "**********\n");
+  sleep(1);
+  printf("**********                                                         "
+         "**********\n");
+  sleep(1);
+  printf("**********                        Grupo                            "
+         "**********\n");
+  sleep(1);
+  printf("**********                                                         "
+         "**********\n");
+  sleep(1);
+  printf(
+      "**********      1-Ana Clara                 2-Ana Darc             **********\n");
+  sleep(1);
+  printf(
+      "**********      3-Ana Laura                 4-Arthur Ramon         **********\n");
+  sleep(1);
+  printf("**********      5-Davi Baratto              6-Francisco Santana    "
+         "**********\n");
+  sleep(1);
+  printf("**********      7-Moises Santos                                    "
+         "**********\n");
+  sleep(1);
+  printf("**********                                                         "
+         "**********\n");
+  sleep(1);
+  printf("*********************************************************************"
+         "********\n");
 
-    char option;
-    double result;
+  sleep(10);
+  system("clear || cls");
 
-    while (1)
+  while (1)
+  {
+  menu:
+
+    printf("\nPara ver o historico da calculadora, digite \"0 h 0\""
+           "\nEscolha qual operação deseja efetuar:\n"
+           "\tsoma               -> +\n\tsubtração          -> "
+           "-\n\tmultiplicação      -> *\n\tdivisão            -> "
+           "/\n\texponenciação      -> ^\n\traiz quadrática    -> "
+           "r\n\traiz cúbica        -> c\n\tfatorial           -> !\n\tequação "
+           "quadrática -> 0 2 0\n\tsair               -> 0 0 0\n\nDigite a "
+           "expressão na forma: numero1 operador numero2\n"
+           "Exemplos: 3.5 + 16, 3 * 4, 5 / 8\n"
+           "Caso a expressāo só receba um valor, digite: numero1 operador 0\n"
+           "Exemplos: 4 ! 0, 9 r 0, 64 c 0\n");
+
+    scanf("%lf %c %lf", &a, &operador, &b);
+
+    switch (operador)
     {
-
-    menu:
-        printf("\nSelect the operation: \nTo add numbers: +\nTo subtract numbers: -\nTo multiply numbers: *\nTo divide numbers: /\nTo solve quadratic equations: 2\nTo solve cubic equations: 3\nTo solve factorial of integer Number: f\nTo exit: e\n");
-        scanf(" %c", &option);
-
-        switch (option)
-        {
-        case '+':
-        {
-            double numberOne, numberTwo;
-            printf("Type two numbers: \n");
-            scanf("%lf %lf", &numberOne, &numberTwo);
-            result = add(numberOne, numberTwo);
-            printf("%lf\n", result);
-            break;
-        }
-        case '-':
-        {
-            double numberOne, numberTwo;
-            printf("Type two numbers: \n");
-            scanf("%lf %lf", &numberOne, &numberTwo);
-            result = sub(numberOne, numberTwo);
-            printf("%lf\n", result);
-            break;
-        }
-        case '*':
-        {
-            double numberOne, numberTwo;
-            printf("Type two numbers: \n");
-            scanf("%lf %lf", &numberOne, &numberTwo);
-            result = mult(numberOne, numberTwo);
-            printf("%f\n", result);
-            break;
-        }
-        case '/':
-        {
-            double numberOne, numberTwo;
-            printf("Type two numbers: \n");
-            scanf("%lf %lf", &numberOne, &numberTwo);
-            if (numberTwo == 0)
-            {
-                printf("Division by zero is not possible!");
-            }
-            else
-            {
-                result = divi(numberOne, numberTwo);
-                printf("%lf\n", result);
-            }
-            break;
-        }
-        case '2':
-        {
-            int coefficientA, coefficientB, coefficientC;
-            double roots[2];
-            printf("Type the integer values of the coefficients A B and C: \n");
-            scanf("%d %d %d", &coefficientA, &coefficientB, &coefficientC);
-            double deltaResult = delta(coefficientA, coefficientB, coefficientC);
-            quadraticEquations(coefficientA, coefficientB, deltaResult,roots);
-            break;
-        }
-        case '3':
-        {
-            double numberOne, numberTwo;
-            printf("Type two numbers: \n");
-            scanf("%lf %lf", &numberOne, &numberTwo);
-            if (numberTwo == 0)
-            {
-                printf("Division by zero is not possible!");
-            }
-            else
-            {
-                result = divi(numberOne, numberTwo);
-                printf("%lf\n", result);
-            }
-            break;
-        }
-        //SAN 
-        case 'f':{
-            int facNum;
-            printf("Enter a value: ");
-            scanf("%d", &facNum);
-
-            factorialOf(facNum);
-            break;
-        }
-        case 'e':
-        {
-            printf("Exiting...");
-            return 0;
-        }
-       
-        default:
-        {
-            printf("The selected operator is undefined, please try again or exit.\n");
-            goto menu;
-        }
-        }
+    case '+':
+    {
+      resultado[0] = somar(a, b);
+      printf("%.4lf\n", resultado[0]);
+      parametros[0] = a;
+      parametros[1] = b;
+      contador =
+          historico(contador, parametros, operador, resultado, matrizHistorico);
+      break;
     }
+    case '-':
+    {
+      resultado[0] = subtrair(a, b);
+      printf("%.4lf\n", resultado[0]);
+      parametros[0] = a;
+      parametros[1] = b;
+      contador =
+          historico(contador, parametros, operador, resultado, matrizHistorico);
+      break;
+    }
+    case '*':
+    {
+      resultado[0] = multiplicar(a, b);
+      printf("%.4f\n", resultado[0]);
+      parametros[0] = a;
+      parametros[1] = b;
+      contador =
+          historico(contador, parametros, operador, resultado, matrizHistorico);
+      break;
+    }
+    case '/':
+    {
+      // Se o valor do segundo numero for igual a zero, o codigo retornara um aviso de erro
+      if (b == 0)
+      {
+        printf("Divisão por zero não é possível!\n");
+      }
+      else
+      {
+        resultado[0] = dividir(a, b);
+        printf("%.4lf\n", resultado[0]);
+        parametros[0] = a;
+        parametros[1] = b;
+        contador = historico(contador, parametros, operador, resultado,
+                             matrizHistorico);
+      }
+      break;
+    }
+    case '^':
+    {
+      int expoente = b;
+      resultado[0] = exponencial(a, expoente);
+      printf("%.4lf\n", resultado[0]);
+      parametros[0] = a;
+      parametros[1] = b;
+      contador =
+          historico(contador, parametros, operador, resultado, matrizHistorico);
+      break;
+    }
+    case 'r':
+    {
+      resultado[0] = raizQuadrada(a);
+      printf("%.4lf\n", resultado[0]);
+      parametro[0] = a;
+      contador =
+          historico(contador, parametro, operador, resultado, matrizHistorico);
+      break;
+    }
+    case 'c':
+    {
+      resultado[0] = raizCubica(a);
+      printf("%.4lf\n", resultado[0]);
+      parametro[0];
+      contador =
+          historico(contador, parametro, operador, resultado, matrizHistorico);
+      break;
+    }
+    case '!':
+    {
+      int fator = a;
+      resultado[0] = fatorial(fator);
+      printf("%d\n", (int)resultado[0]);
+      parametro[0] = a;
+      contador =
+          historico(contador, parametro, operador, resultado, matrizHistorico);
+      break;
+    }
+    case '2':
+    {
+      int A, B, C, erro = 0;
+      double raizes[2];
+      printf("Digite os valores dos coeficientes A B e C: \n");
+      scanf("%d %d %d", &A, &B, &C);
+      equacaoQuadratica(A, B, C, raizes, erro);
+      coeficientes[0] = A;
+      coeficientes[1] = B;
+      coeficientes[2] = C;
+      break;
+    }
+    case 'h':
+    {
+      system("clear || cls");
+      if (contador == 0)
+      {
+        printf("Histórico vazio.\n");
+        break;
+      }
+      imprimirHistorico(contador, matrizHistorico);
+      printf("Digite algo para sair:");
+      scanf(" %c", &operador);
+      break;
+    }
+    case '0':
+    {
+      system("clear || cls");
+      printf("Saindo...\n");
+      sleep(2);
+      return 0;
+    }
+    default:
+    {
+      system("clear || cls");
+      printf("Operador escolhido não foi definido, por favor tente outro ou "
+             "selecione \"e\" para sair.\n");
+      sleep(5);
+      system("clear || cls");
+      goto menu;
+    }
+    }
+    sleep(2);
+    system("clear || cls");
+  }
 }

@@ -2,6 +2,7 @@
   "files.associations": {
     "EP1.C": "cpp",
     "EP2.C": "cpp",
-    "EP3.C": "cpp"
+    "EP3.C": "cpp",
+    "type_traits": "c"
   }
 }

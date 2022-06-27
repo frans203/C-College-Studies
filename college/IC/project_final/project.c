@@ -259,7 +259,7 @@ void imprimirHistorico(int contador, double matriz[LINHAS][4])
   int i = 0;
   do
   {
-    printf("Expressão %d: %.4lf %c %.4lf = %.4lf;\n", i, matriz[i][0],
+    printf("Expressao %d: %.4lf %c %.4lf = %.4lf;\n", i, matriz[i][0],
            (int)matriz[i][1], matriz[i][2], matriz[i][3]);
     i++;
   } while (i < contador);
@@ -281,59 +281,22 @@ int main(int argc, char const *argv[])
  int contador = 0;
  double a, b = 0;
 
-  printf("*********************************************************************"
-         "********\n");
-  sleep(1);
-  printf("**********                                                         "
-         "**********\n");
-  sleep(1);
-  printf("********** Projeto Final de Introducao ao Computador - Calculadora "
-         "**********\n");
-  sleep(1);
-  printf("**********                                                         "
-         "**********\n");
-  sleep(1);
-  printf("**********                        Grupo                            "
-         "**********\n");
-  sleep(1);
-  printf("**********                                                         "
-         "**********\n");
-  sleep(1);
-  printf(
-      "**********      1-Ana Clara                 2-Ana Darc             **********\n");
-  sleep(1);
-  printf(
-      "**********      3-Ana Laura                 4-Arthur Ramon         **********\n");
-  sleep(1);
-  printf("**********      5-Davi Baratto              6-Francisco Santana    "
-         "**********\n");
-  sleep(1);
-  printf("**********      7-Moises Santos                                    "
-         "**********\n");
-  sleep(1);
-  printf("**********                                                         "
-         "**********\n");
-  sleep(1);
-  printf("*********************************************************************"
-         "********\n");
-
-  sleep(10);
-  system("clear || cls");
+  
 
   while (1)
   {
   menu:
 
     printf("\nPara ver o historico da calculadora, digite \"0 h 0\""
-           "\nEscolha qual operação deseja efetuar:\n"
-           "\tsoma               -> +\n\tsubtração          -> "
-           "-\n\tmultiplicação      -> *\n\tdivisão            -> "
-           "/\n\texponenciação      -> ^\n\traiz quadrática    -> "
-           "r\n\traiz cúbica        -> c\n\tfatorial           -> !\n\tequação "
-           "quadrática -> 0 2 0\n\tsair               -> 0 0 0\n\nDigite a "
-           "expressão na forma: numero1 operador numero2\n"
+           "\nEscolha qual operacao deseja efetuar:\n"
+           "\tsoma               -> +\n\tsubtracao          -> "
+           "-\n\tmultiplicacao      -> *\n\tdivisao            -> "
+           "/\n\texponenciacao      -> ^\n\traiz quadratica    -> "
+           "r\n\traiz cubica        -> c\n\tfatorial           -> !\n\tequacao "
+           "quadratica -> 0 2 0\n\tsair               -> 0 0 0\n\nDigite a "
+           "expressao na forma: numero1 operador numero2\n"
            "Exemplos: 3.5 + 16, 3 * 4, 5 / 8\n"
-           "Caso a expressāo só receba um valor, digite: numero1 operador 0\n"
+           "Caso a expressao so receba um valor, digite: numero1 operador 0\n"
            "Exemplos: 4 ! 0, 9 r 0, 64 c 0\n");
 
     scanf("%lf %c %lf", &a, &operador, &b);

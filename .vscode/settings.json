@@ -3,6 +3,7 @@
     "EP1.C": "cpp",
     "EP2.C": "cpp",
     "EP3.C": "cpp",
-    "type_traits": "c"
+    "type_traits": "c",
+    "stdio.h": "c"
   }
 }
